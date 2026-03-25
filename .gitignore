@@ -1,0 +1,19 @@
+# 排除模型权重文件
+*.bin
+*.safetensors
+*.pt
+*.pth
+models/
+
+# 排除 Python 环境和缓存
+__pycache__/
+*.pyc
+.venv/
+vllm-omni-env/
+
+# 排除日志和测试结果
+results/
+*.log
+metrics.csv
+
+audio_tests/
