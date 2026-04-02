@@ -8,8 +8,13 @@ VLLM_PORT = 8091
 MODEL_PATH = "/home/sheng-xiang/hedongjun/models"
 
 # 数据集路径
-DATASET_DIR = "/home/sheng-xiang/hedongjun/datasets/llama_questions/LLAMA1-Test-Set"
-TSV_FILE = f"{DATASET_DIR}/llama_questions_300.tsv"
+DATASETS_ROOT = "/home/sheng-xiang/hedongjun/datasets"
+DATASET_NAME = "llama_questions"
+
+LLAMA_QUESTIONS_DIR = f"{DATASETS_ROOT}/llama_questions/LLAMA1-Test-Set"
+LLAMA_QUESTIONS_TSV = f"{LLAMA_QUESTIONS_DIR}/llama_questions_300.tsv"
+
+LIBRISPEECH_TEST_DIR = f"{DATASETS_ROOT}/LibriSpeech-test"
 
 # 模拟器参数
 QPS = 1.0            # 每秒请求数
@@ -23,10 +28,32 @@ SYSTEM_PROMPT = (
 )
 
 # 结果保存路径
-RESULTS_DIR = "/home/sheng-xiang/hedongjun/simulator/results"
-AUDIO_OUTPUT_DIR = "/home/sheng-xiang/hedongjun/simulator/results/audio"
-METRICS_CSV = f"{RESULTS_DIR}/metrics.csv"
-REPORT_FILE = f"{RESULTS_DIR}/report.txt"
+SIMULATOR_ROOT = "/home/sheng-xiang/hedongjun/simulator"
+
+
+def get_results_paths(dataset_name: str):
+    normalized = dataset_name.strip().lower()
+    if normalized == "llama_questions":
+        result_dir_name = "llama-results"
+    elif normalized in {"librispeech_test", "librispeech-test"}:
+        result_dir_name = "librispeech-results"
+    else:
+        result_dir_name = "results"
+
+    results_dir = f"{SIMULATOR_ROOT}/{result_dir_name}"
+    return {
+        "results_dir": results_dir,
+        "audio_output_dir": f"{results_dir}/audio",
+        "metrics_csv": f"{results_dir}/metrics.csv",
+        "report_file": f"{results_dir}/report.txt",
+    }
+
+
+_default_paths = get_results_paths(DATASET_NAME)
+RESULTS_DIR = _default_paths["results_dir"]
+AUDIO_OUTPUT_DIR = _default_paths["audio_output_dir"]
+METRICS_CSV = _default_paths["metrics_csv"]
+REPORT_FILE = _default_paths["report_file"]
 
 # 采样参数
 THINKER_SAMPLING_PARAMS = {

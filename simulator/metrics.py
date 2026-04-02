@@ -7,15 +7,17 @@ import os
 import time
 from typing import List, Dict
 import statistics
-from config import METRICS_CSV, REPORT_FILE, RESULTS_DIR
 
 
 class MetricsCollector:
-    def __init__(self):
+    def __init__(self, results_dir: str, metrics_csv: str, report_file: str):
         self.results: List[Dict] = []
         self.start_time: float = None
         self.end_time: float = None
-        os.makedirs(RESULTS_DIR, exist_ok=True)
+        self.results_dir = results_dir
+        self.metrics_csv = metrics_csv
+        self.report_file = report_file
+        os.makedirs(self.results_dir, exist_ok=True)
 
     def start(self):
         self.start_time = time.time()
@@ -75,11 +77,11 @@ class MetricsCollector:
         if not self.results:
             return
         fieldnames = list(self.results[0].keys())
-        with open(METRICS_CSV, "w", newline="", encoding="utf-8") as f:
+        with open(self.metrics_csv, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(self.results)
-        print(f"[Metrics] 详细结果已保存: {METRICS_CSV}")
+        print(f"[Metrics] 详细结果已保存: {self.metrics_csv}")
 
     def print_report(self):
         summary = self.summarize()
@@ -111,6 +113,6 @@ class MetricsCollector:
 ╚══════════════════════════════════════════════════════╝
 """
         print(report)
-        with open(REPORT_FILE, "w", encoding="utf-8") as f:
+        with open(self.report_file, "w", encoding="utf-8") as f:
             f.write(report)
-        print(f"[Metrics] 报告已保存: {REPORT_FILE}")
+        print(f"[Metrics] 报告已保存: {self.report_file}")

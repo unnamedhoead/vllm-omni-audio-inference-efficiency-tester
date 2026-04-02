@@ -12,8 +12,8 @@ __pycache__/
 vllm-omni-env/
 
 # 排除日志和测试结果
-results/
+
 *.log
-metrics.csv
+metrics*
 
 audio_tests/

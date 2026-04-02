@@ -75,7 +75,7 @@ def send_request(request: Dict, request_index: int) -> Dict:
                     {
                         "type": "audio_url",
                         "audio_url": {
-                            "url": f"data:audio/wav;base64,{request['audio_b64']}"
+                            "url": f"data:{request.get('audio_mime', 'audio/wav')};base64,{request['audio_b64']}"
                         }
                     }
                 ]
